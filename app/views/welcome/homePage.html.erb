@@ -1,0 +1,130 @@
+
+<div class="container">
+
+
+  <h1 class="header1">Tabib Screens</h1>
+
+  <div class="container2">
+
+<!--    <input id="user_id" name="User[id]" size="30" type="text" />-->
+
+    <%= form_tag(welcome_homePage_path, method: :get) do %>
+      <label>User ID:</label>
+      <%= text_field_tag :user_id, params[:user_id], placeholder: "User ID" %>
+<!--      &nbsp;&nbsp;&nbsp;-->
+<!--      <label>Page No:</label>-->
+      <%#= text_field_tag :page, params[:page], placeholder: "Page" %>
+<!--      &nbsp;&nbsp;&nbsp;-->
+<!--      <label>Per Page:</label>-->
+      <%#= text_field_tag :per_page, params[:per_page], placeholder: "Per Page" %>
+      &nbsp;&nbsp;&nbsp;
+      <%= submit_tag "Search" %>
+
+      &nbsp;&nbsp;&nbsp;
+      Total Counts =
+      <%= @total_count %>
+
+      <br>
+      <br>
+    <% end %>
+
+
+
+
+    <%# (0..(@total_count/50)).each do |i| %>
+     <!-- href or link_to, http://xxxxxxxx/yyyy?page=i -->
+
+
+      <%#= link_to i+1, :action => "homePage", :controller => "welcome", :page => i+1, :user_id => @user_id_saved  %>
+
+    <%# end %>
+
+<!--    <br>-->
+<!--    <br>-->
+
+    <div class = "container2">
+
+      1
+      &nbsp;&nbsp;&nbsp;
+      <%= link_to_if params[:page].to_i > 1,  "< Previous", :action => "homePage", :controller => "welcome", :page => (params[:page].to_i - 1), :user_id => @user_id_saved  %>
+      &nbsp;&nbsp;&nbsp;
+      <% if params[:page].blank?  %>
+        1
+        &nbsp;&nbsp;&nbsp;
+        <%= link_to_if params[:page].to_i < (@total_count/50)+1, "Next >", :action => "homePage", :controller => "welcome", :page => 2, :user_id => @user_id_saved  %>
+
+    <%else %>
+        <%= params[:page] %>
+        &nbsp;&nbsp;&nbsp;
+        <%= link_to_if params[:page].to_i < (@total_count/50)+1, "Next >", :action => "homePage", :controller => "welcome", :page => (params[:page].to_i + 1), :user_id => @user_id_saved  %>
+
+    <%end %>
+
+      &nbsp;&nbsp;&nbsp;
+      <%= link_to_if params[:page].to_i < (@total_count/50)+1, (@total_count/50)+1 , :action => "homePage", :controller => "welcome", :page => (@total_count/50)+1, :user_id => @user_id_saved  %>
+
+    </div>
+
+
+
+    <%#= link_to 'Search', welcome_homePage_path(:id => ) %>
+
+    <p></p>
+
+  </div>
+
+<table class="tg">
+  <tr>
+    <th class="tg-9353">ID</th>
+    <th class="tg-9353">User ID</th>
+    <th class="tg-9353">Screen Name</th>
+    <th class="tg-9353">Device</th>
+    <th class="tg-9353">Time</th>
+    <th class="tg-9353">Time Spent</th>
+  </tr>
+  <% i=0 %>
+  <% @screen.each do |data| %>
+    <% i+=1 %>
+    <tr>
+      <td class="tg-hmp3"><%= data["id"] %></td>
+      <td class="tg-hmp3"><%= data["user_id"] %></td>
+      <td class="tg-hmp3"><%= data["screen_name"] %></td>
+      <%  screen = data["screen_name"].to_s  %>
+      <%  if screen.include?("iOS")   %>
+        <%  sc = "iOS"   %>
+        <%  else  %>
+        <%  sc = "Android"  %>
+        <%  end  %>
+      <td class="tg-hmp3"><%= sc %></td>
+      <td class="tg-hmp3"><%= data["created_at"] %></td>
+
+      <% if i < @screen.length %>
+      <%  data2 = @screen[i] %>
+        <% d2 = data2["created_at"].to_s.to_datetime %>
+        <% d1 = data["created_at"].to_s.to_datetime %>
+        <% d3 = d2.to_time - d1.to_time %>
+        <%else %>
+
+        <% end %>
+
+
+
+      <% if d3.to_i > 900 %>
+        <td class="tg-hmp3"><%= "Exit"  %>   </td>
+      <% elsif d3.to_i > 59 %>
+          <td class="tg-hmp3"><%= d3.to_i / 60  %>  minutes  </td>
+      <%else %>
+        <td class="tg-hmp3"><%= d3.to_i  %>  seconds  </td>
+      <% end %>
+
+
+<!--      <td class="tg-hmp3"><%#= d3.to_i  %>   </td>-->
+    </tr>
+  <% end %>
+</table>
+
+
+
+
+
+</div>
