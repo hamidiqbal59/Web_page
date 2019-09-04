@@ -4,7 +4,7 @@ class WelcomeController < ApplicationController
 
     def homePage
 
-
+        #hamid is now changing the code
         puts params[:user_id]
     
             uri = URI("http://13.126.174.129/tabeeb/get_screens.php")
